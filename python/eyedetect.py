@@ -53,7 +53,6 @@ else:
 for (x,y,w,h) in faces:
     # save off roi_color into a "found faces" folder for later Eye training
     roi_color = input[y:y+h, x:x+w]
-    print 'saving face to: ' + './extractedfeatures/faces/'+filename+'.png'
     cv2.imwrite('./extractedfeatures/faces/'+filename+'.png', roi_color)
     # draw the box
     cv2.rectangle(input,(x,y),(x+w,y+h),(255,0,0),2)
