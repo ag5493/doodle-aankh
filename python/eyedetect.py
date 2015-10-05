@@ -6,7 +6,7 @@ import cv2
 debug = 1
 
 if debug:
-    print 'Input: ',str(sys.argv[1])
+    print 'Input file: ',str(sys.argv[1])
 
 # load image as is
 input = cv2.imread(str(sys.argv[1]), -1)
@@ -33,6 +33,12 @@ if(len(faces) < 1):
     if debug:
         print 'Error: No face found'
     sys.exit(1)
+elif (len(faces) > 1):
+    # drop image into "no faces found" folder for later analysis
+    # db shoud flag this entry as a problem
+    if debug:
+        print 'Error: Too many faces found'
+    sys.exit(2)
 else:
     # drop image into "faces found" folder for later Face training
     if debug:
@@ -46,12 +52,18 @@ for (x,y,w,h) in faces:
     # find the eyes
     eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 4)
     # check to make sure 2 eyes were found, return error if not (note: change to 1 eye, since some people may only have 1)
-    if(len(eyes) < 2):
+    if(len(eyes) < 1):
         # drop image into "no eyes found" folder for later analysis
         # db shoud flag this entry as a problem
         if debug:
             print 'Error: Not enough eyes found'
-        sys.exit(2)
+        sys.exit(3)
+    elif(len(eyes) > 2):
+        # drop image into "no eyes found" folder for later analysis
+        # db shoud flag this entry as a problem
+        if debug:
+            print 'Error: Too many eyes found'
+        sys.exit(4)
     else:
         if debug:
             print len(eyes), 'eyes found.'
